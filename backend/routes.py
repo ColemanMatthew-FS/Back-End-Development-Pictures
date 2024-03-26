@@ -61,10 +61,11 @@ def create_picture():
     req = request.json
     if not req:
         return {"message": "Invalid input parameter"}, 422
-    for picture in data:
-        if picture["id"] == req["id"]:
-            return {"Message": f"picture with id {req['id']} already present"}, 302
+    
     try:
+        for picture in data:
+            if picture["id"] == req["id"]:
+                return {"Message": f"picture with id {req['id']} already present"}, 302
         data.append(req)
     except NameError:
         return {"message": "data not defined"}, 500
@@ -77,7 +78,23 @@ def create_picture():
 
 @app.route("/picture/<int:id>", methods=["PUT"])
 def update_picture(id):
-    pass
+    req = request.json
+    if not req:
+        return {"message": "Invalid input parameter"}, 422
+    try:
+        #i have to enumerate here
+        #if i perform an operation on the picture itself
+        #id est, "picture = req",
+        #it doesnt get written to the data list
+        #i need to modify by index
+        for index, picture in enumerate(data):
+            if picture["id"] == req["id"]:
+                data[index] = req
+                return picture, 200
+        return {"message": "picture not found"}, 404
+    except NameError:
+        return {"message": "data not defined"}, 500
+    
 
 ######################################################################
 # DELETE A PICTURE
