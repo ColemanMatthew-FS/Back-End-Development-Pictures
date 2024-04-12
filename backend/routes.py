@@ -36,7 +36,7 @@ def count():
 @app.route("/picture", methods=["GET"])
 def get_pictures():
     if data:
-        return data
+        return jsonify(data)
     return {"message": "data not found"}, 404
 
 ######################################################################
